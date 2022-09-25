@@ -5,14 +5,31 @@ import { nanoid } from 'nanoid'
 export class Contacts extends Component {
     state = { 
         contacts: [    
-            {id: 'id-1', name: 'Rosie Simpson', number: '459-12-56'},
-            {id: 'id-2', name: 'Hermione Kline', number: '443-89-12'},
-            {id: 'id-3', name: 'Eden Clements', number: '645-17-79'},
-            {id: 'id-4', name: 'Annie Copeland', number: '227-91-26'},
+            // {id: 'id-1', name: 'Rosie Simpson', number: '459-12-56'},
+            // {id: 'id-2', name: 'Hermione Kline', number: '443-89-12'},
+            // {id: 'id-3', name: 'Eden Clements', number: '645-17-79'},
+            // {id: 'id-4', name: 'Annie Copeland', number: '227-91-26'},
         ],
         filter: ''
     }
-    
+
+    componentDidUpdate(prevState) {
+      const {contacts} = this.state;
+      if(prevState !== contacts) {
+        localStorage.setItem("contacts", JSON.stringify(contacts))
+      }
+    }
+
+    componentDidMount(){
+      const newContacts = JSON.parse(localStorage.getItem("contacts"))
+
+      if(newContacts && newContacts.length) {
+        this.setState({
+          contacts: newContacts
+        }) 
+      }
+    }
+
   addContact = (contact) => {
     if (this.isDuplicate(contact)) {
         return alert(`${contact.name}has already added`)
